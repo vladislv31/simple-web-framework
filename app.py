@@ -3,8 +3,18 @@ from webob import Request, Response
 
 
 class App:
-    def __init__(self):
+    def __init__(self, templates_dir='templates', static_dir='static'):
         self.routes = {}
+        self.templates_dir = templates_dir
+        self.static_dir = static_dir
+
+    def get_template(self, template_name):
+        template_path = self.templates_dir + '/' + template_name
+
+        with open(template_path, 'r') as f:
+            content = f.read()
+    
+        return content
 
     def route(self, path):
         def wrapper(handler):

@@ -6,11 +6,11 @@ app = App()
 
 @app.route('/')
 def index(req, resp):
-    resp.text = 'Index page'
+    resp.text = app.get_template('index.html')
 
 @app.route('/about')
 def index(req, resp):
-    resp.text = 'About page'
+    resp.text = app.get_template('about.html')
 
 @app.route('/google')
 def index(req, resp):
