@@ -1,5 +1,6 @@
 from wsgiref.simple_server import make_server
 from webob import Request, Response
+import os
 
 
 class App:
@@ -37,6 +38,28 @@ class App:
         for path, handler in self.routes.items():
             if path == current_path:
                 handler(request, response)
+                return response
+
+        if os.path.isdir(self.static_dir):
+            static_files = []
+
+            for r, d, f in os.walk(self.static_dir):
+                for f_ in f:
+                    static_files.append('/' + '/'.join([r, f_]))
+
+            if current_path in static_files:
+                static_file_ext = current_path.split('.')[-1]
+
+                files_exts = {}
+                files_exts['css'] = 'text/css'
+                files_exts['js'] = 'text/javascript'
+                
+                with open(current_path.strip('/'), 'r') as f:
+                    static_file_content = f.read()
+
+                response.text = static_file_content
+                response.content_type = files_exts[static_file_ext]
+
                 return response
 
         self.default_response(response)
