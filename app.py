@@ -1,6 +1,7 @@
 from wsgiref.simple_server import make_server
 from webob import Request, Response
 import os
+import core.vars as variables
 
 
 class App:
@@ -50,15 +51,13 @@ class App:
             if current_path in static_files:
                 static_file_ext = current_path.split('.')[-1]
 
-                files_exts = {}
-                files_exts['css'] = 'text/css'
-                files_exts['js'] = 'text/javascript'
-                
+                files_exts = variables.content_types
+
                 with open(current_path.strip('/'), 'r') as f:
                     static_file_content = f.read()
 
                 response.text = static_file_content
-                response.content_type = files_exts[static_file_ext]
+                response.content_type = 'text/html' if static_file_ext not in files_exts.keys() else files_exts[static_file_ext]
 
                 return response
 
