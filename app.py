@@ -1,6 +1,7 @@
 from wsgiref.simple_server import make_server
 from webob import Request, Response
 import os
+from jinja2 import Template
 import core.vars as variables
 
 
@@ -10,13 +11,15 @@ class App:
         self.templates_dir = templates_dir
         self.static_dir = static_dir
 
-    def get_template(self, template_name):
+    def get_template(self, template_name, **kwargs):
         template_path = self.templates_dir + '/' + template_name
 
         with open(template_path, 'r') as f:
             content = f.read()
+
+        template = Template(content)
     
-        return content
+        return template.render(**kwargs)
 
     def route(self, path):
         def wrapper(handler):

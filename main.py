@@ -6,7 +6,7 @@ app = App()
 
 @app.route('/')
 def index(req, resp):
-    resp.text = app.get_template('index.html')
+    resp.text = app.get_template('index.html', name='name', title='Title of the page')
 
 @app.route('/about')
 def index(req, resp):
